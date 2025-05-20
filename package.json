@@ -29,6 +29,7 @@
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",
+    "pg": "^8.16.0",
     "stripe": "^18.1.0"
   },
   "devDependencies": {
