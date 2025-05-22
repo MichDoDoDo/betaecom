@@ -21,4 +21,18 @@ export const connectRedis = async () => {
   }
 };
 
+
+export const addToRedisArray = async (key, value) => {
+  await redisClient.rPush(key, value);
+};
+export const getRedisArray = async (key) => {
+  const values = await redisClient.lRange(key, 0, -1);
+  return values;
+};
+
+export const removeProductFromRedisArray = async (key, value) => {
+    console.log("Removing product from Redis array: " + value);
+  await redisClient.lRem(key, 0, value);
+};
+
 export default redisClient

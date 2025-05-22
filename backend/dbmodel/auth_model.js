@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import redisClient from "../db/redis.js";
 const authSchema = new mongoose.Schema(
   {
     firstname: { type: String, required: true },
@@ -9,13 +10,15 @@ const authSchema = new mongoose.Schema(
     password: { type: String, required: true, minlength: 8 },
     email: { type: String, required: true, unique: true },
     address: { type: String, requried: true },
-    userCart: [
-      {
-        quantity: { type: Number, default: 1 },
-        product: { type: mongoose.Schema.Types.ObjectId },
-      },
-    ],
+    userCart: {type : String },
     role: { type: String, enum: ["customer", "admin"], default: "customer" },
+    purchaseHistory: [{
+      purchaseDate: { type: Date, default: Date.now },
+      purchaseItems: [{
+        productId: { type: mongoose.Schema.Types.ObjectId },
+        quantity: { type: Number },
+      }]
+    }]
   },
   {
     timestamps: true,
