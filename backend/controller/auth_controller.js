@@ -91,8 +91,16 @@ export const register = async (req, res) => {
         email,
         password,
         username,
-        address,
+        address
       });
+
+      user.userCart.push(
+        {
+          cart: `Cart:${user._id}`
+        }
+      );
+      await user.save();
+
       const { accesstoken, refreshtoken } = generateTokens(user._id);
       await storeRequestToken(user._id, refreshtoken);
       setCookies(res, accesstoken, refreshtoken);
@@ -135,24 +143,24 @@ export const refreshToken = async (req, res) => {
     if (storedtoken !== refreshtoken) {
       return res.status(401).json({ message: "invaild token" });
     }
-    const accesstoken = jwt.sign({ userId:decode.userId }, process.env.ACCESS_TOKEN, {
-      expiresIn: "15m",
-    });
+    const accesstoken = jwt.sign(
+      { userId: decode.userId },
+      process.env.ACCESS_TOKEN,
+      {
+        expiresIn: "15m",
+      }
+    );
 
     res.cookie("AccessToken", accesstoken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 1000 * 60 * 15,
-  });
-    res.status(200).json({message:"token refreshed successfully"})
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 15,
+    });
+    res.status(200).json({ message: "token refreshed successfully" });
   } catch (err) {
-    res.status(500).json({message:"server side error" +  err.message})
+    res.status(500).json({ message: "server side error" + err.message });
   }
 };
 
-export const getProfile = async(req, res) => {
-
-};
-
-
+export const getProfile = async (req, res) => {};

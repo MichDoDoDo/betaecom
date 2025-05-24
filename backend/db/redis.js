@@ -33,30 +33,6 @@ export const removeProductFromRedisArray = async (key, value) => {
   console.log("Removing product from Redis array: " + value);
   await redisClient.lRem(key, 0, value);
 };
-export const findIndexOfElement = async (key, element) => {
-  try {
-    const index = await redisClient.lPos(key, element);
-    return index;
-  } catch (error) {
-    console.error("Error:", error);
-    return null;
-  }
-};
 
-export const editRedisArray = async (key, index, newVakue) => {
-  try {
-    const result = await client.lSet(key, index, newValue);
-
-    if (result === "OK") {
-      console.log(
-        `Element at index ${index} in list ${listKey} updated successfully.`
-      );
-    } else {
-      console.error(`Error updating element: ${result}`);
-    }
-  } catch (error) {
-    console.error(`Error during LSET operation: ${error}`);
-  }
-};
 
 export default redisClient;

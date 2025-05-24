@@ -10,7 +10,9 @@ const authSchema = new mongoose.Schema(
     password: { type: String, required: true, minlength: 8 },
     email: { type: String, required: true, unique: true },
     address: { type: String, requried: true },
-    userCart: {type : String },
+    userCart: [{
+      cart:{type: String}
+    }],
     role: { type: String, enum: ["customer", "admin"], default: "customer" },
     purchaseHistory: [{
       purchaseDate: { type: Date, default: Date.now },

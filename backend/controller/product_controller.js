@@ -159,3 +159,30 @@ export const getFeaturedProducts = async (req, res) => {
     res.status(500).json({ error: "Server Error" });
   }
 };
+
+
+export const toggelFeatured = async(req, res) =>{
+  try{
+    const product = await Product.findById(req.params.id)
+    if(product){
+      product.isFeatured = !product.isFeatured
+    }
+    const updatedProduct = await product.save()
+    await updateFeaturedProductCache();
+  }
+  catch(err){
+    res.status(500).json({message:"server error"})
+  }
+}
+
+async function updateFeaturedProductCache(){
+  try{
+    const featuredList = await Product.find({isFeatured: true}).lean();
+    await redisClient.set("Featured_product", JSON.stringify(featuredList), "EX", 60 * 60 *24);
+
+
+  }
+  catch(err){
+
+  }
+}
